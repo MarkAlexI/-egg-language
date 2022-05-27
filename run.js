@@ -76,6 +76,13 @@ function parseExpression(program) {
     }
   }
   
+  function run() {
+    var env = Object.create(topEnv);
+    var program = Array.prototype.slice
+      .call(arguments, 0).join("\n");
+    return evaluate(parse(program), env);
+  }
+
   let specialForms = Object.create(null);
   
   specialForms["if"] = function(args, env) {
