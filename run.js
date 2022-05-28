@@ -123,13 +123,31 @@ function parseExpression(program) {
     return value;
   };
   
+  specialForms["fun"] = function(args, env) {
+    if (!args.length)
+      throw new SyntaxError("Функции нужно тело");
+    function name(expr) {
+      if (expr.type != "word")
+        throw new SyntaxError("Имена аргументов должны быть типа word");
+      return expr.name;
+    }
+    var argNames = args.slice(0, args.length - 1).map(name);
+    var body = args[args.length - 1];
+  
+    return function() {
+      if (arguments.length != argNames.length)
+        throw new TypeError("Неверное количество аргументов");
+      var localEnv = Object.create(env);
+      for (var i = 0; i < arguments.length; i++)
+        localEnv[argNames[i]] = arguments[i];
+      return evaluate(body, localEnv);
+    };
+  };
+
   let topEnv = Object.create(null);
   
   topEnv["true"] = true;
   topEnv["false"] = false;
-  
-  //let prog = parse("if(true, false, true)"); 
-  //console.log(evaluate(prog, topEnv)); // → false
   
   ["+", "-", "*", "/", "==", "<", ">"].forEach(function(op) {
     topEnv[op] = new Function("a, b", "return a " + op + " b;");
@@ -151,3 +169,42 @@ function parseExpression(program) {
     console.log(value);
     //return value;
   };
+
+  /*Do it again!©Appolo440*/
+  let prog = parse("if(true, false, true)"); 
+  console.log(evaluate(prog, topEnv)); // → false
+  
+  run("do(define(total, 0),",
+    " define(count, 1),",
+    " while(<(count, 11),",
+    " do(define(total, +(total, count)),",
+    " define(count, +(count, 1)))),",
+    " print(total))");
+// → 55
+
+run("do(define(plusOne, fun(a, +(a, 1))),",
+    " print(plusOne(10)))");
+// → 11
+
+run("do(define(pow, fun(base, exp,",
+    " if(==(exp, 0),",
+    " 1,",
+    " *(base, pow(base, -(exp, 1)))))),",
+    " print(pow(2, 10)))");
+// → 1024
+
+run("do(print(element(array(1, 2, 3), 1)))");
+
+run("do(define(sum, fun(array,",
+    " do(define(i, 0),",
+    " define(sum, 0),",
+    " while(<(i, length(array)),",
+    " do(define(sum, +(sum, element(array, i))),",
+    " define(i, +(i, 1)))),",
+    " sum))),",
+    " print(sum(array(1, 2, 3))))");
+// → 6
+
+run("do(define(f, fun(a, fun(b, +(a, b)))),",
+    " print(f(4)(5)))");
+// → 9
