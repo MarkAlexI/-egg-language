@@ -146,3 +146,8 @@ function parseExpression(program) {
   topEnv["element"] = function(array, i) {
     return array[i];
   };
+
+  topEnv["print"] = function(value) {
+    console.log(value);
+    //return value;
+  };
