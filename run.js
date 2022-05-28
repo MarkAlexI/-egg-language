@@ -134,3 +134,15 @@ function parseExpression(program) {
   ["+", "-", "*", "/", "==", "<", ">"].forEach(function(op) {
     topEnv[op] = new Function("a, b", "return a " + op + " b;");
   });
+
+  topEnv["array"] = function() {
+    return [...arguments];
+  };
+  
+  topEnv["length"] = function(x) {
+    return x.length;
+  };
+  
+  topEnv["element"] = function(array, i) {
+    return array[i];
+  };
