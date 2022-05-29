@@ -14,8 +14,7 @@ function parseExpression(program) {
 }
 
 function skipSpace(string) {
-  string =
-    string.substr(0, string.indexOf("#")) + string.substr(string.indexOf("\n"));
+  string = string.replace(/#.*?\n/, "");
   let first = string.search(/\S/);
   if (first == -1) return "";
   return string.slice(first);
@@ -153,14 +152,17 @@ topEnv["element"] = function (array, i) {
 
 topEnv["print"] = function (value) {
   console.log(value);
+  const div = document.getElementById("output");
+  const text = div.innerHTML;
+  div.innerHTML = text + "<br></br>" + "Result of execution: " + value;
   //return value;
 };
 
 /*Do it again!©Appolo440*/
-/* let prog = parse("if(true, false, true)"); 
+/*  let prog = parse("if(true, false, true)"); 
   console.log(evaluate(prog, topEnv)); // → false
 
-  console.log(JSON.stringify(parse("+(a, 10)")));
+  console.log(JSON.stringify(parse("+(a, 10)")));*/
   // → {type: "apply",
   // operator: {type: "word", name: "+"},
   // args: [{type: "word", name: "a"},
@@ -199,8 +201,8 @@ run("do(define(sum, fun(array,",
 
 run("do(define(f, fun(a, fun(b, +(a, b)))),",
     " print(f(4)(5)))");
-// → 9*/
+// → 9
 
 //verify exist of comments
-console.log(parse("# hello\nx"));
-console.log(parse("a # one    # two\n()"));
+//run("do(print('# hello\n1'))");
+//print(parse("a # one    # two\n()"));
