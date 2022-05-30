@@ -1,1 +1,18 @@
-
+body {
+    background-color: chocolate;
+}
+.content {
+    background-color: coral;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    margin: 0px auto;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+}
+del {
+    text-decoration: line-through;
+    text-decoration-color: blueviolet;
+}
