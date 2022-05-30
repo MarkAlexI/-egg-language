@@ -10,9 +10,24 @@ body {
     padding: 10px;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
+    font-size: 2em;
+}
+@media (max-width: 620px) {
+    .content {
+        font-size: 1.8em;
+    }
+}
+h1 {
+    color: transparent;    
+	-webkit-background-clip: text;
+	background-clip: text;
+	background-image: linear-gradient(to right, red, fuchsia);
 }
 del {
     text-decoration: line-through;
     text-decoration-color: blueviolet;
+}
+#output {
+    background-color: chartreuse;
+    padding: 5px 30px;
 }
